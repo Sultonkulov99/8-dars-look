@@ -41,14 +41,37 @@ export class UsersService {
         }
     }
 
-    async findById(id: number){
-        try {
-            const checkExist = await this.userModel.findOne({where: {id}, include: [Order, Food] })
-        if(!checkExist) throw new NotFoundException()
-        return checkExist  
-        } catch (error) {
-            console.log(error.message);
-             throw new InternalServerErrorException(error)
-        }
-    }
+ async findById(id: number) {
+  try {
+    const orders = await Order.findAll({
+      where: { userId: id },
+      include: [
+        { model: User, attributes: ['id', 'fullname', 'phone'] },
+        { model: Food, attributes: ['food_name', 'food_img'] },
+      ],
+      attributes: ['count'],
+      raw: true,
+      nest: true,
+    });
+    if (!orders.length) throw new NotFoundException(`User with id ${id} not found`);
+    const { id: userId, fullname, phone } = orders[0].user;
+
+    const foods = orders.map(o => ({
+      food_name: o.food.food_name,
+      food_img: o.food.food_img,
+      count: o.count,
+    }));
+
+    return {
+      id: userId,
+      fullname,
+      phone,
+      foods,
+    };
+  } catch (error) {
+    console.error(error.message);
+    throw new InternalServerErrorException(error.message);
+  }
+}
+
 }
