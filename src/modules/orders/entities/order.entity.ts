@@ -28,13 +28,13 @@ export class Order extends Model{
 
     @Column({
         type:DataType.INTEGER,
-        allowNull:true
+        allowNull:false
     })
     count : number
 
     @BelongsTo(() => User)
-    users:User;
+    user: User;
 
     @BelongsTo( () => Food )
-    foods: Food;
+    food: Food;
 }

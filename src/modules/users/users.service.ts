@@ -16,13 +16,13 @@ export class UsersService {
     async createUser(payload : createUserDto){
         try{
             const userExist = await this.userModel.findOne({where: {phone: payload.phone}});
-            if(userExist) throw new ConflictException('User already exists');
+            if(userExist) throw new ConflictException('User phone number already exists in the database');
             const fullname = payload.fullname
             const phone = payload.phone
             const newUser = await this.userModel.create({fullname, phone})
             return {
                 success: true,
-                message: `SUCESSFULLY CREATED A NEW USER`,
+                message: `SUCCESSFULLY CREATED A NEW USER`,
                 data: newUser
             };
 
