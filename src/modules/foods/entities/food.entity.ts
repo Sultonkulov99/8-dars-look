@@ -24,9 +24,9 @@ export class Food extends Model<Food>{
     })
     food_img:string
 
-    @BelongsToMany(() => Food, () => Order)
-    users:User
+    @BelongsToMany(() => User, () => Order)
+    users: User[]
 
     @HasMany(() => Order)
-    orders : Order
+    orders : Order[]
 }

@@ -25,8 +25,8 @@ export class User extends Model{
     phone:string
 
     @BelongsToMany(() => Food, () => Order)
-    foods:Food
+    foods: Food[]
 
     @HasMany(() => Order)
-    orders : Order
+    orders : Order[]
 }

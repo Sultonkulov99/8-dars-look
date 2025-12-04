@@ -37,7 +37,6 @@ export class OrdersService {
                     userId: payload.userId
                 }
             })
-            console.log( existOrder?.dataValues.count)
             if (existOrder) {
                 await this.orderModel.update({
                     count: existOrder.dataValues.count + +payload.count

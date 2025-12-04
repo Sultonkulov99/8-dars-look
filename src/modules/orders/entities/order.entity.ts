@@ -33,8 +33,8 @@ export class Order extends Model{
     count : number
 
     @BelongsTo(() => User)
-    users:User
+    users:User;
 
     @BelongsTo( () => Food )
-    foods: Food
+    foods: Food;
 }
