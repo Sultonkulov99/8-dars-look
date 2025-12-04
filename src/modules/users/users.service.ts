@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { User } from './entities/user.entity';
 import { createUserDto } from './dto/create.user.dto';
 import { Order } from '../orders/entities/order.entity';
-import { NotContains } from 'class-validator';
+import { Food } from '../foods/entities/food.entity';
 
 @Injectable()
 export class UsersService {
@@ -16,9 +16,15 @@ export class UsersService {
     async createUser(payload : createUserDto){
         try{
             const userExist = await this.userModel.findOne({where: {phone: payload.phone}});
-            if(userExist) throw new ConflictException('User already exist');
-
-            return await this.userModel.create({payload});
+            if(userExist) throw new ConflictException('User phone number already exists in the database');
+            const fullname = payload.fullname
+            const phone = payload.phone
+            const newUser = await this.userModel.create({fullname, phone})
+            return {
+                success: true,
+                message: `SUCCESSFULLY CREATED A NEW USER`,
+                data: newUser
+            };
 
         }catch(err){
             console.log(err);
@@ -36,9 +42,13 @@ export class UsersService {
     }
 
     async findById(id: number){
-        const checkExist = await this.userModel.findOne({where: {id}, include: [Order] })
+        try {
+            const checkExist = await this.userModel.findOne({where: {id}, include: [Order, Food] })
         if(!checkExist) throw new NotFoundException()
-
-        return checkExist
+        return checkExist  
+        } catch (error) {
+            console.log(error.message);
+             throw new InternalServerErrorException(error)
+        }
     }
 }
