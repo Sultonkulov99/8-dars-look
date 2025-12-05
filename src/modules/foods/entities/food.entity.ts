@@ -4,7 +4,7 @@ import { User } from "src/modules/users/entities/user.entity";
 
 @Table({tableName:"foods"})
 
-export class Food extends Model<Food>{
+export class Food extends Model{
     @Column({
         type:DataType.INTEGER,
         autoIncrement:true,
@@ -16,11 +16,11 @@ export class Food extends Model<Food>{
         type:DataType.STRING,
         allowNull:false
     })
-    food_name:string
+    food_name: string
 
     @Column({
         type:DataType.STRING,
-        allowNull:false
+        allowNull: true
     })
     food_img:string
 
