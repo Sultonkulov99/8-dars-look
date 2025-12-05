@@ -16,7 +16,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       imports:[ConfigModule],
       inject:[ConfigService],
       useFactory:(config : ConfigService) => ({
-        dialect:"postgres",
+        dialect: config.get("DB_DIALECT"),
         host:config.get("DB_HOST"),
         port:config.get("DB_PORT"),
         database:config.get("DB_DATABASE"),
@@ -25,9 +25,29 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         models:[],
         autoLoadModels:true,
         synchronize:true,
-        logging:true
-      })
-    }),
+        logging:true,
+        dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+    }})}),
+// SequelizeModule.forRoot({
+//   dialect: 'postgres',
+//   host: 'ep-dry-bird-ahdm9pqf-pooler.c-3.us-east-1.aws.neon.tech',
+//   port: 5432,
+//   username: 'neondb_owner',
+//   password: 'npg_xF2b6MAzYOik',
+//   database: 'neondb',
+//   autoLoadModels: true,
+//   synchronize: true,
+//   dialectOptions: {
+//     ssl: {
+//       require: true,
+//       rejectUnauthorized: false,
+//     },
+//   },
+// }),
     UsersModule,
     FoodsModule, 
     OrdersModule
